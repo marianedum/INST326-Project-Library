@@ -88,8 +88,8 @@ class Library:
 class Test(unittest.TestCase):
     def testOne(self):
         self.book = Book("Harry Potter Book One")
-        self.customer1 = Customer("John", "Doe", "11122334", ["Book1", "Book2"])
-        self.customer2 = Customer("Jane", "Doe", None, ["Book3"])
+        self.customer1 = Customer("John", "Doe", "11122334", ["The Perks of Being a Wallflower", "1984"])
+        self.customer2 = Customer("Jane", "Doe", None, ["The Fire Next Time"])
 
     def test_add_to_waitlist(self):
         self.book.add_to_waitlist(self.customer1) # Add a customer to the waitlist
