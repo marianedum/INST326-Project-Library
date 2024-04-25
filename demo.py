@@ -1,3 +1,6 @@
+import unittest
+
+
 class Book:
     def __init__(self, title, author, genre, copies):
         pass
@@ -82,6 +85,8 @@ class Library:
     def calculate_late_fees(self, book_title):
         pass
     
-    
-if __name__ == "__main__":
+class Test(unittest.TestCase):
     pass
+ 
+if __name__ == "__main__":
+    unittest.main()
