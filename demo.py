@@ -14,13 +14,29 @@ class Customer:
     
 class Library:
     def __init__(self):
-        pass
-    
-    def add_customer(self, customer):
-       pass
+            self.customers = {}
+            self.next_id = 1
 
-    def remove_customer(self, customer):
-        pass
+    def add_customer(self, name, email, phone):
+        self.next_id += 1
+        id = self.next_id
+
+        customer = {
+            "id": id, 
+            "name": name,
+            "email": email,
+            "phone": phone
+        }  
+
+        self.customers[id] = customer
+
+    
+    def remove_customer(self, id): 
+        for email, customer in self.customers.items():
+            if customer['id'] == id:
+                del self.customers[email]
+                return True
+            return False
     
     def checkout_book(self, book_title, customer_card):
         pass
