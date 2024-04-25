@@ -83,7 +83,22 @@ class Library:
             return f"This book is not checked out or was not checked out."
     
     def calculate_late_fees(self, book_title):
-        pass
+        #"using checkout_book method to find due date for book"
+        due_date = date.today() + timedelta(days = 14)
+
+        #"return_date is calculated the moment return_book method called since calculate_late_fees is calculated inside return_book
+        return_date = date.today()
+    
+        #"to determine if returned before or after due date"
+        diff = return_date - due_date
+    
+        #"if for returned before due date, else for returned after due date
+        if diff <= 0:
+            return 0
+        else:
+            fee = diff * 0.05
+            return fee
+            print("The late fee for {book_title} is ${fee}.")
     
 class Test(unittest.TestCase):
     def testOne(self):
@@ -105,6 +120,6 @@ class Test(unittest.TestCase):
         self.assertEqual(removed_customer, self.customer1)
         self.assertNotIn(self.customer1, self.book.waitlist)
         self.assertIsNone(self.book.remove_from_waitlist())
- 
+
 if __name__ == "__main__":
     unittest.main()
