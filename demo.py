@@ -105,6 +105,18 @@ class Test(unittest.TestCase):
         self.assertEqual(removed_customer, self.customer1)
         self.assertNotIn(self.customer1, self.book.waitlist)
         self.assertIsNone(self.book.remove_from_waitlist())
+
+    def test_checkout_book(self):
+      self.book.checkout_book(self.book, self.customer1)
+      self.assertIn(self.checkout)
+      self.book.checkout_book(self.customer1)
+      self.assertIn(self.customer1)
+           
+    def test_return_book(self):
+      self.book.checkout_book(self.book, self.customer1)
+      return_book = self.book.return_book, self.customer1.return_book
+      self.assertEqual(return_book, self.book, self.customer1)
+      self.assertIsNone(self.book.return_book())
  
 if __name__ == "__main__":
     unittest.main()
