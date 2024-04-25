@@ -86,7 +86,25 @@ class Library:
         pass
     
 class Test(unittest.TestCase):
-    pass
+    def testOne(self):
+        self.book = Book("Harry Potter Book One")
+        self.customer1 = Customer("John", "Doe", "11122334", ["Book1", "Book2"])
+        self.customer2 = Customer("Jane", "Doe", None, ["Book3"])
+
+    def test_add_to_waitlist(self):
+        self.book.add_to_waitlist(self.customer1) # Add a customer to the waitlist
+        self.assertIn(self.customer1, self.book.waitlist) # Checks if customer is in the waitlist
+        self.book.add_to_waitlist(self.customer1)  #Adds customer again, checking to find duplicates
+        self.assertEqual(len(self.book.waitlist), 1)  # Checks to see if there is one person on the wailist
+        self.book.add_to_waitlist(self.customer2)  #Adds another customer to the waitlist, they have no library card)
+        self.assertNotIn(self.customer2, self.book.waitlist) # Ensures second customer is not in the waitlist
+
+    def test_remove_from_waitlist(self):
+        self.book.add_to_waitlist(self.customer1)
+        removed_customer = self.book.remove_from_waitlist()
+        self.assertEqual(removed_customer, self.customer1)
+        self.assertNotIn(self.customer1, self.book.waitlist)
+        self.assertIsNone(self.book.remove_from_waitlist())
  
 if __name__ == "__main__":
     unittest.main()
