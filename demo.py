@@ -54,7 +54,7 @@ class Library:
     
     def remove_customer(self, id): 
         for email, customer in self.customers.items():
-            if customer['id'] == id:
+            if customer['id'] ==. id:
                 del self.customers[email]
                 return True
             return False
