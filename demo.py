@@ -71,7 +71,7 @@ class Library:
                 books = file.readlines()
                 books = [book.strip()for book in books]
         
-        checkout_date = datetime.today()
+        checkout_date = date.today()
         due_date = checkout_date + timedelta(days=30)
 
         book_info = { 
