@@ -1,5 +1,5 @@
 import unittest
-from datetime import datetime, timedelta
+from datetime import date, timedelta
 
 class Book:
     def __init__(self, title, author, genre, copies):
@@ -88,12 +88,13 @@ class Library:
             if len(self.copies_list[book_title]) == 0:
                 print(f"Sorry, no available copies of", book_title)
             return None
-        return checkout_date, due_date
+        return due_date
 
 
     def return_book(self, book_title, customer):
         if book_title in self.checked_out_book:
                 if self.checked_out_book[book_title] == customer.card:
+                    self.calculate_late_fees(self.checked_out_book[book_title])
                     del self.checked_out_book[book_title]
                     return f"Book {book_title} has been returned"
                 else:
@@ -104,22 +105,20 @@ class Library:
         # create date for return if more than however many days, call late fees
     
     def calculate_late_fees(self, book_title):
-        #"using checkout_book method to find due date for book"
-        due_date = date.today() + timedelta(days = 14)
-
-        #"return_date is calculated the moment return_book method called since calculate_late_fees is calculated inside return_book
+        #return_date is calculated the moment return_book method called since calculate_late_fees is calculated inside return_book
         return_date = date.today()
     
-        #"to determine if returned before or after due date"
-        diff = return_date - due_date
+        #to determine if returned before or after due date"
+        diff = return_date - self.checkout_book
     
-        #"if for returned before due date, else for returned after due date
+        #if for returned before due date, else for returned after due date
         if diff <= 0:
+            print(f"There is no late fee for {book_title}.")
             return 0
         else:
             fee = diff * 0.05
+            print(f"The late fee for {book_title} is ${fee}.")
             return fee
-            print("The late fee for {book_title} is ${fee}.")
     
 class Test(unittest.TestCase):
     def testOne(self):
