@@ -66,7 +66,7 @@ class Library:
                 return True
             return False
     
-    def checkout_book(self, book_title, library_card):
+    def checkout_book(self, book_title, customer):
         with open('library.txt', 'r') as file:
                 books = file.readlines()
                 books = [book.strip()for book in books]
