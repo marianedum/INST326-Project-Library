@@ -2,42 +2,60 @@ import unittest
 from datetime import datetime, timedelta
 
 class Book:
-    def __init__(self, title, author, genre, copies):
-        pass
+    def __init__(self, book_title, author, genre, copies):
+        self.book_title = book_title
+        self.author = author
+        self.genre = genre
+        self.copies = copies
+        self.waitlist = []
+
+        
     
     def add_to_waitlist(self, customer):
-        # if condition fir check out -- if book has already been checkout
+        # if condition for check out -- if book has already been checkout
+        library = Library()
+        book = Book ()
+        my_customer = Customer ()
+        if library.checkout_book:
         # call to see if book is in wailist
-        if customer.library_card is not None:
-            if customer not in self.wailist:
-                if len(customer.waitlist_books) < 5:
-                   self.waitlist.append(customer)
-                   # customer.(waitlist list).append(customer) // abi
-                   print(f"{customer.first_name} added to waitlist for {self.title}")
+            if customer.library_card is not None:
+                if customer not in self.wailist:
+                    if len(customer.waitlist_books) < 5:
+                        self.waitlist.append(customer)
+                        print(f"{customer.first_name} added to waitlist for {self.book_title}")
+                        return self.waitlist                 
+                    else:
+                        print(f"{customer.first_name} is already on waitlist waiting for 5 books")
+                        return None
                 else:
-                   print(f"{customer.first_name} is already on waitlist waiting for 5 books")
+                    print(f"{customer.first_name} is already on waitlist for {self.book_title}")
+                    return None
             else:
-                print(f"{customer.first_name} is already on waitlist for {self.title}")
-        else:
-            print("Customer has no card on file")
+                print("Customer has no card on file")
+                return None
+        return None
 
 
     def remove_from_waitlist(self):
         if self.waitlist:
             removed_customer = self.waitlist.pop(0)
-            #  removed_customer.(waitlist list).remove(self) // abi
-            print(f"{removed_customer.first_name} has been removed from waitlist for {self.title}")
+            customer_removed = Customer()
+            customer_removed.books_on_waitlist.remove(self.book_title)
+            print(f"{removed_customer.first_name} has been removed from waitlist for {self.book_title}")
             for c, customer in enumerate(self.waitlist, start=1):
                 print(f"Moving {customer.first_name} up in the waitlist")
             return removed_customer
         else:
             print("Waitlist is empty")
             return None
-    
+            
 class Customer:
     def __init__(self, first_name, last_name, library_card):
-        pass
-    
+        self.first_name = first_name
+        self.last_name = last_name
+        self.library_card = None
+        self.books_on_waitlist = []
+       
 class Library:
     def __init__(self):
             self.customers = {}
@@ -73,7 +91,7 @@ class Library:
         
         checkout_date = datetime.today()
         due_date = checkout_date + timedelta(days=30)
-
+         
         book_info = { 
             'name': customer,
             'checkout_date': checkout_date,
