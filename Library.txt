@@ -1,0 +1,15 @@
+9781786751041, Alices Adventures in Wonderland, Lewis Carroll, 10
+9780679601685, Pride and Prejudice, Jane Austen, 10
+9780895773227, Moby Dick, Herman Melville, 10
+9780312060244, The Scarlett Letter, Nathaniel Hawthorne, 10
+9780397001514, To Kill a Mockingbird, Harper Lee, 10
+9780743273565, The Great Gatsby, F. Scott Fitzgerald, 10
+9780698102194, Lord of the Flies, William Golding, 10
+9780439064866, Harry Potter and the Chamber of Secrets, J.K. Rowling, 10
+9780345410016, Fahrenheit 451, Ray Bradbury, 10
+9781416548898, Gone With the Wind, Margaret Mitchell, 10
+9780062658753, Charlotte’s Web, E.B. White, 10
+9780670836086, Peter Pan, J.M. Barrie, 10
+9781402714603, The Adventures of Tom Sawyer, Mark Twain, 10
+9780679417248, Oliver Twist, Charles Dickens, 10
+9780064431781, Where the Wild Things Are, Maurice Sendak, 10
