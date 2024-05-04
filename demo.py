@@ -40,6 +40,8 @@ class Library:
     def __init__(self):
             self.customers = {}
             self.next_id = 1
+            self.checked_out_books_on_file = {}
+            self.copies = {}
 
     def add_customer(self, name, email, phone):
         self.next_id += 1
@@ -66,11 +68,26 @@ class Library:
         with open('library.txt', 'r') as file:
                 books = file.readlines()
                 books = [book.strip()for book in books]
+        
+        checkout_date = datetime.today()
+        due_date = checkout_date + timedelta(days=30)
 
-        if book_title in books:
-                return f"Book {book_title} checkout initiated for {customer_card} Please return the {book_title} in 14 days."
+        book_info = { 
+            'name': customer,
+            'checkout_date': checkout_date,
+            'due_date': due_date
+        }
+
+        if book_title not in self.checked_out_books:
+            self.checked_out_books_on_file[book_title] = [book_info]
         else:
-                return f"Book {book_title} not found in library."
+            self.checked_out_books_on_file[book_title].append(book_info)
+            self.copies[book_title] -= 1
+            if len(self.copies_list[book_title]) == 0:
+                print(f"Sorry, no available copies of", book_title)
+            return None
+        return checkout_date, due_date
+
 
     def return_book(self, book_title, customer_card):
         if book_title in self.checked_out_book:
