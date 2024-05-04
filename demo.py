@@ -80,7 +80,7 @@ class Library:
             'due_date': due_date
         }
 
-        if book_title not in self.checked_out_books:
+        if book_title not in self.checked_out_books_on_file:
             self.checked_out_books_on_file[book_title] = [book_info]
         else:
             self.checked_out_books_on_file[book_title].append(book_info)
@@ -91,7 +91,7 @@ class Library:
         return checkout_date, due_date
 
 
-    def return_book(self, book_title, library_card):
+    def return_book(self, book_title, customer):
         if book_title in self.checked_out_book:
                 if self.checked_out_book[book_title] == customer.card:
                     del self.checked_out_book[book_title]
