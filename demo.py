@@ -92,14 +92,13 @@ class Library:
         if not customer_found:
             print(f"No customer found with library card {library_card}")
     
-    def checkout_book(self, book_title, customer):
-        
+    def checkout_book(self, book_title, customer, checkout_date):
         with open('library.txt', 'r') as file:
                 books = file.readlines()
                 books = [book.strip()for book in books]
         
         checkout_date = datetime.today()
-        due_date = checkout_date + timedelta(days=30)
+        due_date = checkout_date + timedelta(days=14)
          
         book_info = { 
             'name': customer,
@@ -114,21 +113,28 @@ class Library:
             self.copies[book_title] -= 1
             if len(self.copies_list[book_title]) == 0:
                 print(f"Sorry, no available copies of", book_title)
-                return None
+            return None
         return checkout_date, due_date
 
 
     def return_book(self, book_title, customer):
-        if book_title in self.checked_out_book:
-                if self.checked_out_book[book_title] == customer.card:
-                    del self.checked_out_book[book_title]
-                    return f"Book {book_title} has been returned"
+        if book_title in self.checked_out_books_on_file:
+            customer = Customer()
+            checkout_date = self.checkout_date
+            for c in customer.customers:
+                if customer.library_card:
+                    del self.checked_out_book_on_file[book_title]
+                    end = checkout_date + timedelta(days = 30)
+                    for i in range(30):
+                        random_return_date = checkout_date + (end - checkout_date) * random.random()
+                        print(random_return_date)
+
+                        # days_checked_out = (return_date - checkout_date).days
+                        # late_fee = self.calculate_late_fees()
+                        return random_return_date
                 else:
-                    return f"This book was not checked out by {customer_card}"
-        else:
-            return f"This book is not checked out or was not checked out."
-        # if book is late, calculte late fee OR
-        # create date for return if more than however many days, call late fees
+                    return None
+            return None
     
     def calculate_late_fees(self, book_title):
         #"using checkout_book method to find due date for book"
