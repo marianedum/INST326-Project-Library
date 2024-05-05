@@ -19,7 +19,7 @@ class Book:
         if library.checkout_book:
         # call to see if book is in wailist
             if customer.library_card is not None:
-                if customer not in self.wailist_list:
+                if customer not in self.wailist:
                     if len(customer.waitlist_books) < 5:
                         self.waitlist.append(customer)
                         print(f"{customer.first_name} added to waitlist for {self.book_title}")
@@ -85,6 +85,7 @@ class Library:
             return False
     
     def checkout_book(self, book_title, customer):
+        
         with open('library.txt', 'r') as file:
                 books = file.readlines()
                 books = [book.strip()for book in books]
@@ -105,7 +106,7 @@ class Library:
             self.copies[book_title] -= 1
             if len(self.copies_list[book_title]) == 0:
                 print(f"Sorry, no available copies of", book_title)
-            return None
+                return None
         return checkout_date, due_date
 
 
