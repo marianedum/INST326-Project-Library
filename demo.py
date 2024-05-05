@@ -64,13 +64,14 @@ class Library:
             self.checked_out_books_on_file = {}
             self.copies = {}
 
-    def add_customer(self, customer): #add library card
-        new_customer = Customer(customer)
-        new_library_card = "{:05d}".format(random.randint(10000, 99999))
-        new_customer.library_card = new_library_card
-        self.customers.append(new_customer)
-        print(f"Customer added with library card number {new_customer.library_card}")
-        return new_customer
+    def add_customer(self, customer):
+        if customer not in self.customers:
+            new_library_card = "{:05d}".format(random.randint(10000, 99999))
+            customer.library_card = new_library_card
+            self.customers.append(customer)
+            print(f"Customer added with library card number {customer.library_card}")
+            return customer
+        return None
 
     
     def remove_customer(self, library_card, customer): 
