@@ -32,27 +32,39 @@ class Book:
             print("Waitlist is empty")
             return None
     
+    import random
+
+
 class Customer:
-    def __init__(self, first_name, last_name, library_card):
-        pass
-    
+    def __init__(self, first_name, last_name, email, phone):
+        # Customer class initialization
+        self.name = first_name + " " + last_name
+        self.email = email
+        self.phone = phone
+        self.library_card = None # added library card attribute, and since no card initially, set to None
+        self.books_on_waitlist = []
+        self.late_fees = 0
+customer1 = Customer("John", "Snow", "john.snow@example.com", "240-578-4567")
+
+print("Customer Name:", customer1.name)
+print("Customer Email:", customer1.email)
+print("Customer Phone:", customer1.phone)
+print("Library Card Number:", customer1.library_card)
+print("Books on Waitlist:", customer1.books_on_waitlist)
+print("Late Fees:", customer1.late_fees)
+
+
 class Library:
     def __init__(self):
-            self.customers = {}
-            self.next_id = 1
-
-    def add_customer(self, name, email, phone):
-        self.next_id += 1
-        id = self.next_id
-
-        customer = {
-            "id": id, 
-            "name": name,
-            "email": email,
-            "phone": phone
-        }  
-
-        self.customers[id] = customer
+        self.customers = []
+        
+    def add_customer(self, customer):
+        # method to add new customer to library
+        new_customer = Customer(customer)
+        new_library_card = "{:05d}".format(random.randint(10000, 99999))
+        new_customer.library_card = new_library_card
+        self.customers.append(new_customer)
+        print(f"Customer added with library card number {new_customer.library_card}")
 
     
     def remove_customer(self, id): 
@@ -105,6 +117,16 @@ class Test(unittest.TestCase):
         self.assertEqual(removed_customer, self.customer1)
         self.assertNotIn(self.customer1, self.book.waitlist)
         self.assertIsNone(self.book.remove_from_waitlist())
+    
+    def test_add_customer(self):
+        lib = Library()
+        lib.add_customer("person", "email@example.com", "202-605-3500")
+        
+        assert len(lib.customers) == 1
+        assert lib.customers[1]["name"] == "person"
+        assert lib.customers[1]["email"] == "email@example.com"
+        assert lib.customers[1]["phone"] == "202-606-3500"
  
 if __name__ == "__main__":
     unittest.main()
+    
