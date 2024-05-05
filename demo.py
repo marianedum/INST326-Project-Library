@@ -19,7 +19,7 @@ class Book:
         if library.checkout_book:
         # call to see if book is in wailist
             if customer.library_card is not None:
-                if customer not in self.wailist:
+                if customer not in self.wailist_list:
                     if len(customer.waitlist_books) < 5:
                         self.waitlist.append(customer)
                         print(f"{customer.first_name} added to waitlist for {self.book_title}")
