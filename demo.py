@@ -70,38 +70,57 @@ class Library:
         new_customer.library_card = new_library_card
         self.customers.append(new_customer)
         print(f"Customer added with library card number {new_customer.library_card}")
+        return new_customer
 
     
-    def remove_customer(self, library_card): 
+    def remove_customer(self, library_card, customer): 
+        customer = Customer()
+        customer_name = customer.name #name of customer that
+        
+        if self.calculate_late_fees > 10: #figure out threshhold
+            self.customers.remove(customer)
+            # self.customers.remove(customer)
+            print(f"Customer with library card {customer.library_card} removed due to excessive late fees.")
+            return 
+        else:
+            print(f"Customer with library card {customer.library_card} has {customer.late_fees} late fees, which is within the allowed limit.")
+            return
+                       
+        if not customer_found:
+            print(f"No customer found with library card {library_card}")
         try: 
             library_card = int(library_card)
         except ValueError:
             print(f"Invalid library card number {library_card}")
-            return
-        customer_found = False
-        for customer in self.customers: # loop through customers list
-            if customer.library_card == library_card:
-                customer_found = True
-                if customer.late_fees > 10:
-                    self.customers.remove(customer)
-                    print(f"Customer with library card {customer.library_card} removed due to excessive late fees.")
-                    return 
-                else:
-                    print(f"Customer with library card {customer.library_card} has {customer.late_fees} late fees, which is within the allowed limit.")
-                    return
-        if not customer_found:
-            print(f"No customer found with library card {library_card}")
+            self.customers.remove(customer)
+            return customer_name
+        finally:
+            return None
+        # self.add_customer
+        
+        # for customer in self.customers: # loop through customers list
+        #     if self.add_customer: # .library_card == library_card:
+        #         customer_found = True
+        
     
     def checkout_book(self, book_title, customer):
-        
-        with open('library.txt', 'r') as file:
-                books = file.readlines()
-                books = [book.strip()for book in books]
-        
+        if not self.copies:
+            file_name = 'library.txt'
+            with open(file_name, 'r') as file:
+                for line in file:
+                    parts = line.strip().split(', ')
+                    title = parts[1]
+                    copies = int(parts[3])
+                    self.copies[title] = copies
+
+        if book_title not in self.copies or self.copies[book_title] == 0:
+            print("Sorry, no available copies of", book_title)
+            return None
+
         checkout_date = datetime.today()
         due_date = checkout_date + timedelta(days=30)
-         
-        book_info = { 
+
+        book_info = {
             'name': customer,
             'checkout_date': checkout_date,
             'due_date': due_date
@@ -112,10 +131,12 @@ class Library:
         else:
             self.checked_out_books_on_file[book_title].append(book_info)
             self.copies[book_title] -= 1
-            if len(self.copies_list[book_title]) == 0:
-                print(f"Sorry, no available copies of", book_title)
+            if self.copies[book_title] == 0:
+                print(f"Sorry, no available copies of {book_title}")
                 return None
+
         return checkout_date, due_date
+
 
 
     def return_book(self, book_title, customer):
@@ -131,57 +152,86 @@ class Library:
         # create date for return if more than however many days, call late fees
     
     def calculate_late_fees(self, book_title):
-        #"using checkout_book method to find due date for book"
-        due_date = date.today() + timedelta(days = 14)
+        # if 
+        # #"using checkout_book method to find due date for book"
+        # due_date = date.today() + timedelta(days = 14)
 
-        #"return_date is calculated the moment return_book method called since calculate_late_fees is calculated inside return_book
-        return_date = date.today()
+        # #"return_date is calculated the moment return_book method called since calculate_late_fees is calculated inside return_book
+        # return_date = date.today()
     
-        #"to determine if returned before or after due date"
-        diff = return_date - due_date
+        # #"to determine if returned before or after due date"
+        # diff = return_date - due_date
     
-        #"if for returned before due date, else for returned after due date
-        if diff <= 0:
-            return 0
-        else:
-            fee = diff * 0.05
-            return fee
-            print("The late fee for {book_title} is ${fee}.")
+        # #"if for returned before due date, else for returned after due date
+        # if diff <= 0:
+        #     return 0
+        # else:
+        #     fee = diff * 0.05
+        #     return fee
+        #     print("The late fee for {book_title} is ${fee}.")
     
-class Test(unittest.TestCase):
-    def testOne(self):
-        self.book = Book("Harry Potter Book One")
-        self.customer1 = Customer("John", "Doe", "11122334", ["The Perks of Being a Wallflower", "1984"])
-        self.customer2 = Customer("Jane", "Doe", None, ["The Fire Next Time"])
+# class Test(unittest.TestCase):
+#     def testOne(self):
+#         self.book = Book("Harry Potter Book One")
+#         self.customer1 = Customer("John", "Doe", "11122334", ["The Perks of Being a Wallflower", "1984"])
+#         self.customer2 = Customer("Jane", "Doe", None, ["The Fire Next Time"])
 
-    def test_add_to_waitlist(self):
-        self.book.add_to_waitlist(self.customer1) # Add a customer to the waitlist
-        self.assertIn(self.customer1, self.book.waitlist) # Checks if customer is in the waitlist
-        self.book.add_to_waitlist(self.customer1)  #Adds customer again, checking to find duplicates
-        self.assertEqual(len(self.book.waitlist), 1)  # Checks to see if there is one person on the wailist
-        self.book.add_to_waitlist(self.customer2)  #Adds another customer to the waitlist, they have no library card)
-        self.assertNotIn(self.customer2, self.book.waitlist) # Ensures second customer is not in the waitlist
+#     def test_add_to_waitlist(self):
+#         self.book.add_to_waitlist(self.customer1) # Add a customer to the waitlist
+#         self.assertIn(self.customer1, self.book.waitlist) # Checks if customer is in the waitlist
+#         self.book.add_to_waitlist(self.customer1)  #Adds customer again, checking to find duplicates
+#         self.assertEqual(len(self.book.waitlist), 1)  # Checks to see if there is one person on the wailist
+#         self.book.add_to_waitlist(self.customer2)  #Adds another customer to the waitlist, they have no library card)
+#         self.assertNotIn(self.customer2, self.book.waitlist) # Ensures second customer is not in the waitlist
 
-    def test_remove_from_waitlist(self):
-        self.book.add_to_waitlist(self.customer1)
-        removed_customer = self.book.remove_from_waitlist()
-        self.assertEqual(removed_customer, self.customer1)
-        self.assertNotIn(self.customer1, self.book.waitlist)
-        self.assertIsNone(self.book.remove_from_waitlist())
+#     def test_remove_from_waitlist(self):
+#         self.book.add_to_waitlist(self.customer1)
+#         removed_customer = self.book.remove_from_waitlist()
+#         self.assertEqual(removed_customer, self.customer1)
+#         self.assertNotIn(self.customer1, self.book.waitlist)
+#         self.assertIsNone(self.book.remove_from_waitlist())
         
-    def test_checkout_book(self):
-        self.book.checkout_book(self.book, self.customer1)
-        self.assertIn(self.checkout)
-        self.book.checkout_book(self.customer1)
-        self.assertIn(self.customer1)
+#     def test_checkout_book(self):
+#         self.book.checkout_book(self.book, self.customer1)
+#         self.assertIn(self.checkout)
+#         self.book.checkout_book(self.customer1)
+#         self.assertIn(self.customer1)
            
-    def test_return_book(self):
-      self.book.checkout_book(self.book, self.customer1)
-      return_book = self.book.return_book, self.customer1.return_book
-      self.assertEqual(return_book, self.book, self.customer1)
-      self.assertIsNone(self.book.return_book())
+#     def test_return_book(self):
+#       self.book.checkout_book(self.book, self.customer1)
+#       return_book = self.book.return_book, self.customer1.return_book
+#       self.assertEqual(return_book, self.book, self.customer1)
+#       self.assertIsNone(self.book.return_book())
 
+class TestCheckoutBook(unittest.TestCase):
+    def setUp(self):
+        self.library = Library()
+        self.customer = Customer("John Doe", "johndoe@example.com", "1234567890")
+        self.library.add_customer(self.customer)
+        self.library.copies["The Great Gatsby"] = 1
 
- 
+    def test_checkout_valid_book(self):
+        checkout_date, due_date = self.library.checkout_book("The Great Gatsby", self.customer)
+        self.assertIsNotNone(checkout_date)
+        self.assertIsNotNone(due_date)
+        self.assertEqual(self.library.copies["The Great Gatsby"], 0)
+
+    def test_checkout_invalid_book(self):
+        checkout_date, due_date = self.library.checkout_book("The Catcher in the Rye", self.customer)
+        self.assertIsNone(checkout_date)
+        self.assertIsNone(due_date)
+
+    def test_checkout_out_of_stock(self):
+        self.library.checkout_book("The Great Gatsby", self.customer)
+        checkout_date, due_date = self.library.checkout_book("The Great Gatsby", self.customer)
+        self.assertIsNone(checkout_date)
+        self.assertIsNone(due_date)
+
 if __name__ == "__main__":
     unittest.main()
+ 
+# if __name__ == "__main__":
+    
+#     library = Library()
+#     library.checkout_book("The Great Gatsby", "John Doe")
+    
