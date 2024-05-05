@@ -49,40 +49,59 @@ class Book:
             print("Waitlist is empty")
             return None
             
+import random
+
+
 class Customer:
-    def __init__(self, first_name, last_name, library_card):
-        self.first_name = first_name
-        self.last_name = last_name
-        self.library_card = None
+    def __init__(self, first_name, last_name, email, phone):
+        # Customer class initialization
+        self.name = first_name + " " + last_name
+        self.email = email
+        self.phone = phone
+        self.library_card = None # added library card attribute, and since no card initially, set to None
         self.books_on_waitlist = []
-       
+        self.late_fees = 0
+customer1 = Customer("John", "Snow", "john.snow@example.com", "240-578-4567")
+
+print("Customer Name:", customer1.name)
+print("Customer Email:", customer1.email)
+print("Customer Phone:", customer1.phone)
+print("Library Card Number:", customer1.library_card)
+print("Books on Waitlist:", customer1.books_on_waitlist)
+print("Late Fees:", customer1.late_fees)
+
+
 class Library:
     def __init__(self):
-            self.customers = {}
-            self.next_id = 1
-            self.checked_out_books_on_file = {}
-            self.copies = {}
+        self.customers = []
+        
+    def add_customer(self, customer):
+        # method to add new customer to library
+        new_customer = Customer(customer)
+        new_library_card = "{:05d}".format(random.randint(10000, 99999))
+        new_customer.library_card = new_library_card
+        self.customers.append(new_customer)
+        print(f"Customer added with library card number {new_customer.library_card}")
 
-    def add_customer(self, name, email, phone): #add library card
-        self.next_id += 1
-        id = self.next_id
-
-        customer = {
-            "id": id, 
-            "name": name,
-            "email": email,
-            "phone": phone
-        }  
-
-        self.customers[id] = customer
-
-    
-    def remove_customer(self, id): 
-        for email, customer in self.customers.items():
-            if customer['id'] == id:
-                del self.customers[email]
-                return True
-            return False
+    def remove_customer(self, library_card):
+        try: 
+            library_card = int(library_card)
+        except ValueError:
+            print(f"Invalid library card number {library_card}")
+            return
+        customer_found = False
+        for customer in self.customers: # loop through customers list
+            if customer.library_card == library_card:
+                customer_found = True
+                if customer.late_fees > 10:
+                    self.customers.remove(customer)
+                    print(f"Customer with library card {customer.library_card} removed due to excessive late fees.")
+                    return 
+                else:
+                    print(f"Customer with library card {customer.library_card} has {customer.late_fees} late fees, which is within the allowed limit.")
+                    return
+        if not customer_found:
+            print(f"No customer found with library card {library_card}")
     
     def checkout_book(self, book_title, customer):
         with open('library.txt', 'r') as file:
