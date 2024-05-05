@@ -1,11 +1,11 @@
 import unittest
 from datetime import datetime, timedelta
+import random
 
 class Book:
-    def __init__(self, book_title, author, genre, copies):
+    def __init__(self, book_title, author, copies):
         self.book_title = book_title
         self.author = author
-        self.genre = genre
         self.copies = copies
         self.waitlist = []
 
@@ -49,41 +49,30 @@ class Book:
             print("Waitlist is empty")
             return None
             
-import random
-
-
 class Customer:
     def __init__(self, first_name, last_name, email, phone):
-        # Customer class initialization
         self.name = first_name + " " + last_name
         self.email = email
         self.phone = phone
-        self.library_card = None # added library card attribute, and since no card initially, set to None
+        self.library_card = None 
         self.books_on_waitlist = []
         self.late_fees = 0
-customer1 = Customer("John", "Snow", "john.snow@example.com", "240-578-4567")
-
-print("Customer Name:", customer1.name)
-print("Customer Email:", customer1.email)
-print("Customer Phone:", customer1.phone)
-print("Library Card Number:", customer1.library_card)
-print("Books on Waitlist:", customer1.books_on_waitlist)
-print("Late Fees:", customer1.late_fees)
-
-
+       
 class Library:
     def __init__(self):
-        self.customers = []
-        
-    def add_customer(self, customer):
-        # method to add new customer to library
+            self.customers = {}
+            self.checked_out_books_on_file = {}
+            self.copies = {}
+
+    def add_customer(self, customer): #add library card
         new_customer = Customer(customer)
         new_library_card = "{:05d}".format(random.randint(10000, 99999))
         new_customer.library_card = new_library_card
         self.customers.append(new_customer)
         print(f"Customer added with library card number {new_customer.library_card}")
 
-    def remove_customer(self, library_card):
+    
+    def remove_customer(self, library_card): 
         try: 
             library_card = int(library_card)
         except ValueError:
