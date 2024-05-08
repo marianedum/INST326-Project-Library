@@ -164,23 +164,18 @@ class Library:
         return self.return_date
     
     def calculate_late_fees(self, book_title):
-        # if 
-        # #"using checkout_book method to find due date for book"
-        # due_date = date.today() + timedelta(days = 14)
-
-        # #"return_date is calculated the moment return_book method called since calculate_late_fees is calculated inside return_book
-        # return_date = date.today()
-    
-        # #"to determine if returned before or after due date"
-        # diff = return_date - due_date
-    
-        # #"if for returned before due date, else for returned after due date
-        # if diff <= 0:
-        #     return 0
-        # else:
-        #     fee = diff * 0.05
-        #     return fee
-        #     print("The late fee for {book_title} is ${fee}.")
+        get_due_date = self.due_date
+        if self.return_date is not None:
+            days_late = abs((self.return_date - get_due_date).days)
+            print(f"{book_title} is {days_late} days late")
+            if days_late > 0:
+                late = days_late * 0.50
+                print(f"Customer needs pay ${late}")
+                return int(late)
+        else:
+            late = 0
+            print(f"Customer is fine")
+            return int(late)
     
 
         if __name__ == "__main__":
