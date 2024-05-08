@@ -64,7 +64,6 @@ class Customer:
     def __init__(self, first_name, last_name, email, phone):
         self.name = first_name + " " + last_name
         self.email = email
-        self.phone = phone
         self.library_card = None 
         self.books_on_waitlist = []
         self.late_fees = 0
