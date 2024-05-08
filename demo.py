@@ -9,31 +9,35 @@ class Book:
         self.copies = copies
         self.waitlist = []
 
+    def add_to_waitlist(self, a_customer, library_id):
+        # if a customer doesn't have a library card, they can't be added to thr waitlist
+        if a_customer.library_card is None:
+            print("Customer has no card on file")
+            return None
+        # if the book title the customer wants isn't in the library system, they can't check out a book
+        if self.book_title is not library_id.book_title:
+            print("Book not found in library records")
+            return None
+        # if there are availible copies, they be added to the waitlist... because duh
+        if self.copies > 0:
+            print(f"There are available copies of {self.book_title}, {a_customer.name} cannot be added to waitlist")
+            return None
+        # if the customer is already on the waitlist, they shouldn't be added again
+        if a_customer in self.waitlist:
+            print(f"{a_customer.name} is already on the waitlist for {self.book_title}")
+            return None
+        # check the len of the books on the customer's waitlist to see if they have reached their limit
+        if len(a_customer.books_on_waitlist) >= 5:
+            print(f"{a_customer.name} is already on waitlist waiting for 5 books")
+            return None
         
-    
-    def add_to_waitlist(self, customer):
-        # if condition for check out -- if book has already been checkout
-        library = Library()
-        book = Book ()
-        my_customer = Customer ()
-        if library.checkout_book:
-        # call to see if book is in wailist
-            if customer.library_card is not None:
-                if customer not in self.wailist:
-                    if len(customer.waitlist_books) < 5:
-                        self.waitlist.append(customer)
-                        print(f"{customer.first_name} added to waitlist for {self.book_title}")
-                        return self.waitlist                 
-                    else:
-                        print(f"{customer.first_name} is already on waitlist waiting for 5 books")
-                        return None
-                else:
-                    print(f"{customer.first_name} is already on waitlist for {self.book_title}")
-                    return None
-            else:
-                print("Customer has no card on file")
-                return None
-        return None
+        # after are the conditions are met the customer can now be added to the waitlist
+        # and they will add the book to the books on their waitlist and the method
+        # will return the waitlist for other methods
+        self.waitlist.append(a_customer)
+        a_customer.books_on_waitlist.append(self.book_title)
+        print(f"{a_customer.name} added to waitlist for {self.book_title}")
+        return self.waitlist
 
 
     def remove_from_waitlist(self):
