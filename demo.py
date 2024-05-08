@@ -40,17 +40,24 @@ class Book:
         return self.waitlist
 
 
-    def remove_from_waitlist(self):
+    def remove_from_waitlist(self, a_customer):
+        # Check if there are customers on the waitlist
         if self.waitlist:
-            removed_customer = self.waitlist.pop(0)
-            customer_removed = Customer()
-            customer_removed.books_on_waitlist.remove(self.book_title)
-            print(f"{removed_customer.first_name} has been removed from waitlist for {self.book_title}")
-            for c, customer in enumerate(self.waitlist, start=1):
-                print(f"Moving {customer.first_name} up in the waitlist")
-            return removed_customer
+            print(f"{a_customer.name} has been removed from waitlist for {self.book_title}")
+            print(f"Email sent to {a_customer.email} about {self.book_title}")
+            # Iterate through the waitlist and print messages for customers who need to be moved up
+            for index, customer in enumerate(self.waitlist, start=1):
+                # Check if the current customer is not the one being removed
+                if customer != a_customer:
+                    print(f"Moving {customer.name} up in the waitlist")
+            # Remove the customer from the waitlist
+            self.waitlist.pop(a_customer)
+            # Return the updated waitlist
+            return self.waitlist
         else:
+            # Print a message indicating that the waitlist is empty
             print("Waitlist is empty")
+            # Return None since there is no waitlist to return
             return None
             
 class Customer:
