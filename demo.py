@@ -70,9 +70,14 @@ class Customer:
        
 class Library:
     def __init__(self):
-            self.customers = {}
-            self.checked_out_books_on_file = {}
-            self.copies = {}
+            # self.customers = {}
+            # self.checked_out_books_on_file = {}
+            # self.copies = {}
+        self.customers = []
+        self.checkedout_books_on_file = {}
+        self.books_on_file = []
+        self.return_date = None
+        self.due_date = None
 
     def add_customer(self, customer):
         if customer not in self.customers:
