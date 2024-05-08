@@ -182,62 +182,6 @@ class Library:
         #     return fee
         #     print("The late fee for {book_title} is ${fee}.")
     
-# class Test(unittest.TestCase):
-#     def testOne(self):
-#         self.book = Book("Harry Potter Book One")
-#         self.customer1 = Customer("John", "Doe", "11122334", ["The Perks of Being a Wallflower", "1984"])
-#         self.customer2 = Customer("Jane", "Doe", None, ["The Fire Next Time"])
-
-#     def test_add_to_waitlist(self):
-#         self.book.add_to_waitlist(self.customer1) # Add a customer to the waitlist
-#         self.assertIn(self.customer1, self.book.waitlist) # Checks if customer is in the waitlist
-#         self.book.add_to_waitlist(self.customer1)  #Adds customer again, checking to find duplicates
-#         self.assertEqual(len(self.book.waitlist), 1)  # Checks to see if there is one person on the wailist
-#         self.book.add_to_waitlist(self.customer2)  #Adds another customer to the waitlist, they have no library card)
-#         self.assertNotIn(self.customer2, self.book.waitlist) # Ensures second customer is not in the waitlist
-
-#     def test_remove_from_waitlist(self):
-#         self.book.add_to_waitlist(self.customer1)
-#         removed_customer = self.book.remove_from_waitlist()
-#         self.assertEqual(removed_customer, self.customer1)
-#         self.assertNotIn(self.customer1, self.book.waitlist)
-#         self.assertIsNone(self.book.remove_from_waitlist())
-        
-#     def test_checkout_book(self):
-#         self.book.checkout_book(self.book, self.customer1)
-#         self.assertIn(self.checkout)
-#         self.book.checkout_book(self.customer1)
-#         self.assertIn(self.customer1)
-           
-#     def test_return_book(self):
-#       self.book.checkout_book(self.book, self.customer1)
-#       return_book = self.book.return_book, self.customer1.return_book
-#       self.assertEqual(return_book, self.book, self.customer1)
-#       self.assertIsNone(self.book.return_book())
-
-# class TestCheckoutBook(unittest.TestCase):
-#     def setUp(self):
-#         self.library = Library()
-#         self.customer = Customer("John Doe", "johndoe@example.com", "1234567890")
-#         self.library.add_customer(self.customer)
-#         self.library.copies["The Great Gatsby"] = 1
-
-#     def test_checkout_valid_book(self):
-#         checkout_date, due_date = self.library.checkout_book("The Great Gatsby", self.customer)
-#         self.assertIsNotNone(checkout_date)
-#         self.assertIsNotNone(due_date)
-#         self.assertEqual(self.library.copies["The Great Gatsby"], 0)
-
-#     def test_checkout_invalid_book(self):
-#         checkout_date, due_date = self.library.checkout_book("The Catcher in the Rye", self.customer)
-#         self.assertIsNone(checkout_date)
-#         self.assertIsNone(due_date)
-
-#     def test_checkout_out_of_stock(self):
-#         self.library.checkout_book("The Great Gatsby", self.customer)
-#         checkout_date, due_date = self.library.checkout_book("The Great Gatsby", self.customer)
-#         self.assertIsNone(checkout_date)
-#         self.assertIsNone(due_date)
 
         if __name__ == "__main__":
             library = Library()
