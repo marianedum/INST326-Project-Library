@@ -151,24 +151,17 @@ class Library:
 
 
 
-    def return_book(self, book_title, customer):
-        if book_title in self.checked_out_books_on_file:
-            customer = Customer()
-            checkout_date = self.checkout_date
-            for c in customer.customers:
-                if customer.library_card:
-                    del self.checked_out_book_on_file[book_title]
-                    end = checkout_date + timedelta(days = 30)
-                    for i in range(30):
-                        random_return_date = checkout_date + (end - checkout_date) * random.random()
-                        print(random_return_date)
+    def return_book(self, book_title, book):
+        if book_title in self.checkedout_books_on_file:
+            get_checkout_date = self.checkedout_books_on_file[book_title][-1]['checkout_date']
+            if get_checkout_date:
+                end = get_checkout_date + timedelta(days=45)
+                self.return_date = get_checkout_date + (end - get_checkout_date) * random.random()
+                print(f"Return date for {book_title} is {self.return_date}")
+                self.calculate_late_fees(book_title)
+                book.copies += 1
 
-                        # days_checked_out = (return_date - checkout_date).days
-                        # late_fee = self.calculate_late_fees()
-                        return random_return_date
-                else:
-                    return None
-            return None
+        return self.return_date
     
     def calculate_late_fees(self, book_title):
         # if 
