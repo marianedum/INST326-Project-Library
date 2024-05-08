@@ -178,7 +178,7 @@ class Library:
             return int(late)
     
 
-        if __name__ == "__main__":
-            library = Library()
-            library.checkout_book("The Great Gatsby", "John Doe")
+# ??????? I took my stuff out, so you can figure this out
+if __name__ == "__main__":
+    pass
     
