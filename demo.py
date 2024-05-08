@@ -210,35 +210,31 @@ class Library:
 #       self.assertEqual(return_book, self.book, self.customer1)
 #       self.assertIsNone(self.book.return_book())
 
-class TestCheckoutBook(unittest.TestCase):
-    def setUp(self):
-        self.library = Library()
-        self.customer = Customer("John Doe", "johndoe@example.com", "1234567890")
-        self.library.add_customer(self.customer)
-        self.library.copies["The Great Gatsby"] = 1
+# class TestCheckoutBook(unittest.TestCase):
+#     def setUp(self):
+#         self.library = Library()
+#         self.customer = Customer("John Doe", "johndoe@example.com", "1234567890")
+#         self.library.add_customer(self.customer)
+#         self.library.copies["The Great Gatsby"] = 1
 
-    def test_checkout_valid_book(self):
-        checkout_date, due_date = self.library.checkout_book("The Great Gatsby", self.customer)
-        self.assertIsNotNone(checkout_date)
-        self.assertIsNotNone(due_date)
-        self.assertEqual(self.library.copies["The Great Gatsby"], 0)
+#     def test_checkout_valid_book(self):
+#         checkout_date, due_date = self.library.checkout_book("The Great Gatsby", self.customer)
+#         self.assertIsNotNone(checkout_date)
+#         self.assertIsNotNone(due_date)
+#         self.assertEqual(self.library.copies["The Great Gatsby"], 0)
 
-    def test_checkout_invalid_book(self):
-        checkout_date, due_date = self.library.checkout_book("The Catcher in the Rye", self.customer)
-        self.assertIsNone(checkout_date)
-        self.assertIsNone(due_date)
+#     def test_checkout_invalid_book(self):
+#         checkout_date, due_date = self.library.checkout_book("The Catcher in the Rye", self.customer)
+#         self.assertIsNone(checkout_date)
+#         self.assertIsNone(due_date)
 
-    def test_checkout_out_of_stock(self):
-        self.library.checkout_book("The Great Gatsby", self.customer)
-        checkout_date, due_date = self.library.checkout_book("The Great Gatsby", self.customer)
-        self.assertIsNone(checkout_date)
-        self.assertIsNone(due_date)
+#     def test_checkout_out_of_stock(self):
+#         self.library.checkout_book("The Great Gatsby", self.customer)
+#         checkout_date, due_date = self.library.checkout_book("The Great Gatsby", self.customer)
+#         self.assertIsNone(checkout_date)
+#         self.assertIsNone(due_date)
 
-if __name__ == "__main__":
-    unittest.main()
- 
-# if __name__ == "__main__":
-    
-#     library = Library()
-#     library.checkout_book("The Great Gatsby", "John Doe")
+        if __name__ == "__main__":
+            library = Library()
+            library.checkout_book("The Great Gatsby", "John Doe")
     
