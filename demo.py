@@ -124,7 +124,7 @@ class Library:
         self.due_date = None
 
         # Load books from a file
-        file_name = 'librarycopy.txt'
+        file_name = 'library.txt'
         with open(file_name, 'r') as file:
             for line in file:
                 parts = line.strip().split(', ')
