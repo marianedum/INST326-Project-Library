@@ -50,7 +50,7 @@ class Book:
                 if customer != a_customer:
                     print(f"Moving {customer.name} up in the waitlist")
             # Remove the customer from the waitlist
-            self.waitlist.pop(a_customer)
+            self.waitlist.remove(a_customer)
             # Return the updated waitlist
             return self.waitlist
         else:
@@ -79,6 +79,9 @@ class Library:
         self.due_date = None
 
     def add_customer(self, customer):
+        for char in customer.name:
+            if not ('a' <= char <= 'z' or 'A' <= char <= 'Z'):
+             return None
         if customer not in self.customers:
             new_library_card = "{:05d}".format(random.randint(10000, 99999))
             customer.library_card = new_library_card
@@ -86,14 +89,16 @@ class Library:
             print(f"Customer added with library card number {customer.library_card}")
             return customer
         return None
-
-    
+        
+        
     def remove_customer(self, library_card, customer): 
         customer = Customer()
         customer_name = customer.name #name of customer that
         
         if self.calculate_late_fees > 10: #figure out threshhold
             self.customers.remove(customer)
+            # check to see if the customer you removed is in a waitlist for a book once you remove them
+            # if so, remove them from the waitlist - call remove_from_waitlist
             # self.customers.remove(customer)
             print(f"Customer with library card {customer.library_card} removed due to excessive late fees.")
             return None
@@ -179,5 +184,10 @@ class Library:
 
 # ??????? I took my stuff out, so you can figure this out
 if __name__ == "__main__":
-    pass
+    library = Library()
+    book = Book("The Hobbit", "JRR Tolkien", 10)
+    book2 = Book("The Lord of the Rings", "<NAME>", 1)
+    book3 = Book("The Hitchhiker's Guide to the Galaxy", "<NAME>", 3)
+    book4 = Book("The Catcher in the Rye", "<NAME>", 4)
+    book5 = Book("The Grapes of Wrath", "<NAME>", 3)
     
