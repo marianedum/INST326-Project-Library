@@ -2,6 +2,9 @@ from datetime import datetime, timedelta
 import random
 
 class Book:
+    """
+    Represents a book in a library.
+    """
     def __init__(self, book_title, author, copies):
         self.book_title = book_title
         self.author = author
@@ -67,7 +70,7 @@ class Book:
 
         Edge Case:
             Modifies the waitlist of the book when the customer is revoed from the list of customers in the library.
-    """
+        """
         # Check if there are customers on the waitlist
         if self.waitlist:
             print(f"{a_customer.name} has been removed from waitlist for {self.book_title}")
@@ -88,25 +91,39 @@ class Book:
             return None
             
 class Customer:
+    """A class to represent a library customer."""
+
     def __init__(self, first_name, last_name, email):
+        """
+        Initialize a customer with their first name, last name, and email.
+
+        Args:
+            first_name (str): The first name of the customer.
+            last_name (str): The last name of the customer.
+            email (str): The email address of the customer.
+        """
         self.name = first_name + " " + last_name
         self.email = email
-        self.library_card = None 
+        self.library_card = None
         self.books_on_waitlist = []
         self.late_fees = 0
-       
+
+
 class Library:
+    """A class to represent a library."""
+
     def __init__(self):
-            # self.customers = {}
-            # self.checked_out_books_on_file = {}
-            # self.copies = {}
+        """
+        Initialize a library with its attributes and load books from a file.
+        """
         self.customers = []
         self.checkedout_books_on_file = {}
         self.books_on_file = []
         self.return_date = None
         self.due_date = None
 
-        file_name = 'library.txt'
+        # Load books from a file
+        file_name = 'librarycopy.txt'
         with open(file_name, 'r') as file:
             for line in file:
                 parts = line.strip().split(', ')
@@ -117,9 +134,24 @@ class Library:
                 self.books_on_file.append(book)
 
     def add_customer(self, customer):
-        for char in customer.name:
-            if not ('a' <= char <= 'z' or 'A' <= char <= 'Z'):
-             return None
+
+        """
+        Add a new customer to the library.
+
+        Args:
+            customer (Customer): The customer object to be added.
+
+        Returns:
+            Customer or None: The added customer object if successfully added, None otherwise.
+        """
+        ascii_letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        customer.name = customer.name.replace(" ", "")
+
+        if ascii_letters.find(customer.name) == -1:
+            print(ascii_letters.find(customer.name))
+            return None
+         # condition if the customer is not in the library system, it gives them a randomized libary card
+        # Once given library card, adds them to a list of customers in the library
         if customer not in self.customers:
             new_library_card = "{:05d}".format(random.randint(10000, 99999))
             customer.library_card = new_library_card
@@ -127,19 +159,33 @@ class Library:
             print(f"Customer added with library card number {customer.library_card}")
             return customer
         return None
-        
-        
-    def remove_customer(self, library_card, customer): 
-        customer = Customer()
-        customer_name = customer.name #name of customer that
-        
-        if self.calculate_late_fees > 10: #figure out threshhold
-            self.customers.remove(customer)
-            # check to see if the customer you removed is in a waitlist for a book once you remove them
-            # if so, remove them from the waitlist - call remove_from_waitlist
-            # self.customers.remove(customer)
-            print(f"Customer with library card {customer.library_card} removed due to excessive late fees.")
+
+    def remove_customer(self, book, customer):
+        """
+        Remove a customer from the library.
+
+        Args:
+            book (Book): The book object.
+            customer (Customer): The customer object to be removed.
+
+        Returns:
+            str or None: The library card number of the removed customer if successfully removed, None otherwise.
+        """      
+        # base case to remove customer because they dont exist in the library system
+        if customer not in self.customers:
+            print("Customer not found")
             return None
+        # case where if the customer has more than 10 dollars in late fees, they are removed from the library system
+        # edge case where once where they are removed from the library system they are removed from the waitlist for the book
+        if self.calculate_late_fees(book.book_title) > 10:
+            self.customers.remove(customer)
+            for c in customer.waitlist:
+                if customer is c:
+                    customer.waitlist.remove(customer)
+                    print(f"{customer.name} removed from the waitlist for book: {book.book_title}")
+            print(f"Customer with library card {customer.library_card} removed due to excessive late fees.")
+            return customer.library_card
+
         else:
             print(f"Customer with library card {customer.library_card} has {customer.late_fees} late fees, which is within the allowed limit.")
             return None
