@@ -313,7 +313,7 @@ class Library:
             print(f"Customer is fine")
             return int(late)
     
-class UnitTests: 
+class UnitTests(): 
     """
     Class for all unit tests that are called after certain calls in main method 
     are made.
