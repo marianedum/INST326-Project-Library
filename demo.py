@@ -186,6 +186,7 @@ class Library:
         else:
             print(f"Customer with library card {customer.library_card} has {customer.late_fees} late fees, which is within the allowed limit.")
             return None
+    
     def checkout_book(self, book_title, my_customer, checkedout_book):
         """
         Checking if the book the customer wants is in the library and checking if the customer has a library card first before they are able to checkout.
@@ -282,6 +283,19 @@ class Library:
         return None
     
     def calculate_late_fees(self, book_title):
+        """
+        Checks if a customer's returned book would have late fees. If the customer's
+        book was returned by the due date, customer won't have any late fees. If
+        customer's book was returned late, the late fee will be calculted.
+
+        Parameters:
+            book_title (str): the title of the book that the late fee is being 
+            calculated for.
+            
+        Return:
+            float: the amount for the late fee, or 0 if there is no late fees
+        """
+        
         get_due_date = self.due_date
         if self.return_date is not None:
             days_late = abs((self.return_date - get_due_date).days)
