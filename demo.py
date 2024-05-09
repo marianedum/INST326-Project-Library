@@ -143,12 +143,7 @@ class Library:
         else:
             print(f"Customer with library card {customer.library_card} has {customer.late_fees} late fees, which is within the allowed limit.")
             return None
-        # self.add_customer
-        
-        # for customer in self.customers: # loop through customers list
-        #     if self.add_customer: # .library_card == library_card:
-        #         customer_found = True
-        
+    
     def checkout_book(self, book_title, my_customer, checkedout_book):
         """
         Checking if the book the customer wants is in the library and checking if the customer has a library card first before they are able to checkout.
@@ -166,22 +161,25 @@ class Library:
         """
         in_library = False
         is_customer = False
+        # Checking if the book the customer wants is on file and if the customer has a library card.
         for book in self.books_on_file :
             if book.book_title == book_title:
                 in_library = True
         for person in self.customers :
             if person.name == my_customer.name:
-                is_customer = True       
+                is_customer = True 
+        # If the book is not in the library, print message and return none      
         if not in_library:
             print("The library doesn't have this book")
             return None
-        
+        # If the customer is does not have a library card, print message and return none
         if not is_customer:
             print(f"{my_customer.name} doesn't have a library card")
             return None
         global checkout_date
         global due_date
         global book_info    
+        # Creating a checkout date and due date
         checkout_date = datetime.today()
         self.due_date = checkout_date + timedelta(days=15)
         book_info = {
@@ -191,13 +189,14 @@ class Library:
             'due_date': self.due_date,
         }
         print(f"Librarian is processing book")
+        # If there are no more available copies left, return none, if there are, take one copy out of the library
         if checkedout_book.copies <= 0:
             print(f"Sorry, no available copies of {book_title}")
             checkedout_book.add_to_waitlist(my_customer, checkedout_book)
             return None       
         else :
             checkedout_book.copies -= 1
-
+        # Successfully checking out the book, printing out message, returning checkout_date, due_date, and book_title
             if book_title not in self.checkedout_books_on_file:
                 self.checkedout_books_on_file[book_title] = [book_info]
             else:
@@ -217,17 +216,19 @@ class Library:
             book (obj): the Book object itself
             customer (obj): the Customer object
         """
+        # Checking if the book the customer is returning is on file, if it is, get the checkout date and creating a list of the book checked out
         if book_title in self.checkedout_books_on_file:
             get_checkout_date = ""
             checkedout_book_arr = self.checkedout_books_on_file[book_title]
             index = 0
+            # removing the book the customer is returning 
             for i in range (len(checkedout_book_arr)):
                 if checkedout_book_arr[i]['name'] == customer.name:
                     index = i
                     get_checkout_date = checkedout_book_arr[i]['checkout_date']
 
             checkedout_book_arr.pop(index)
-            
+            # If the customer returns the book after 15 days (random), late fees will occur
             self.return_date = get_checkout_date + timedelta(days= 45 * random.random())
             print(f"Return date for {book_title} is {self.return_date}")
             self.calculate_late_fees(book_title)
@@ -239,6 +240,19 @@ class Library:
         return None
     
     def calculate_late_fees(self, book_title):
+        """
+        Checks if a customer's returned book would have late fees. If the customer's
+        book was returned by the due date, customer won't have any late fees. If
+        customer's book was returned late, the late fee will be calculted.
+
+        Parameters:
+            book_title (str): the title of the book that the late fee is being 
+            calculated for.
+            
+        Return:
+            float: the amount for the late fee, or 0 if there is no late fees
+        """
+        
         get_due_date = self.due_date
         if self.return_date is not None:
             days_late = abs((self.return_date - get_due_date).days)
