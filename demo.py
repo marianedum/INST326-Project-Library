@@ -60,7 +60,7 @@ class Book:
             return None
             
 class Customer:
-    def __init__(self, first_name, last_name, email, phone):
+    def __init__(self, first_name, last_name, email):
         self.name = first_name + " " + last_name
         self.email = email
         self.library_card = None 
@@ -78,6 +78,16 @@ class Library:
         self.return_date = None
         self.due_date = None
 
+        file_name = 'library.txt'
+        with open(file_name, 'r') as file:
+            for line in file:
+                parts = line.strip().split(', ')
+                book_title = parts[1]
+                author = parts[2]
+                copies = int(parts[3])
+                book = Book(book_title, author, copies)
+                self.books_on_file.append(book)
+
     def add_customer(self, customer):
         if customer not in self.customers:
             new_library_card = "{:05d}".format(random.randint(10000, 99999))
@@ -88,7 +98,7 @@ class Library:
         return None
 
     
-    def remove_customer(self, library_card, customer): 
+    def remove_customer(self, customer): 
         customer = Customer()
         customer_name = customer.name #name of customer that
         
@@ -106,61 +116,94 @@ class Library:
         #     if self.add_customer: # .library_card == library_card:
         #         customer_found = True
         
-    
-    # idk figure it out, there is something wrong with the file reader stuff
     def checkout_book(self, book_title, my_customer, checkedout_book):
-        global checkout_date, due_date, book_info
-        print(f"Do you have a library card, {my_customer.name}?")
-        if self.add_customer(my_customer):
-            checkout_date = datetime.today()
-            self.due_date = checkout_date + timedelta(days=15)
+        """
+        Checking if the book the customer wants is in the library and checking if the customer has a library card first before they are able to checkout.
+        During checkout, customer will get a due date.
+        If there are no more available copies in the library, the book will be added to add_to_waitlist.
+        Parameters:
+            book_title (str): the title of the book in library txt file
+            my_customer (str): the first and last name of the customer
+            checkedout_book (str): the title of the book the customer has checked out
 
-            book_info = {
-                'name': my_customer.name,
-                'book_title': book_title,
-                'checkout_date': checkout_date,
-                'due_date': self.due_date,
-                # 'available_copies': checkedout_book.copies
-            }
-
-            print(f"Librian is processing book, potential check book information: {book_info}")
-
-        if book_title not in self.checkedout_books_on_file:
-            self.checkedout_books_on_file[book_title] = [book_info]
+        Return:
+            checkout_date (date): the date the customer checked out the book
+            self.due_date (date): the date the customer has to return the book by for no late fees 
+            book_title (str): the title of the book in library txt file
+        """
+        in_library = False
+        is_customer = False
+        for book in self.books_on_file :
+            if book.book_title == book_title:
+                in_library = True
+        for person in self.customers :
+            if person.name == my_customer.name:
+                is_customer = True       
+        if not in_library:
+            print("The library doesn't have this book")
+            return None
+        
+        if not is_customer:
+            print(f"{my_customer.name} doesn't have a library card")
+            return None
+        global checkout_date
+        global due_date
+        global book_info    
+        checkout_date = datetime.today()
+        self.due_date = checkout_date + timedelta(days=15)
+        book_info = {
+            'name': my_customer.name,
+            'book_title': book_title,
+            'checkout_date': checkout_date,
+            'due_date': self.due_date,
+        }
+        print(f"Librarian is processing book")
+        if checkedout_book.copies <= 0:
+            print(f"Sorry, no available copies of {book_title}")
+            checkedout_book.add_to_waitlist(my_customer, checkedout_book)
+            return None       
+        else :
             checkedout_book.copies -= 1
 
-            if checkedout_book.copies <= 0:
-                print(f"Sorry, no available copies of {book_title}")
-                checkedout_book.add_to_waitlist(my_customer, checkedout_book)
-                return None
-        else:
-            self.checkedout_books_on_file[book_title].append(book_info)
-        # don't change anything above this comment
-        if book_title in self.books_on_file:
-            file_name = 'librarycopy.txt'
-            with open(file_name, 'r') as file:
-                for line in file:
-                    parts = line.strip().split(', ')
-                    book_title = parts[1]
-                    new_copies = int(parts[3])
-                    self.checkedout_books_on_file.append(book_title)
-                    self.copies.append(new_copies)
+            if book_title not in self.checkedout_books_on_file:
+                self.checkedout_books_on_file[book_title] = [book_info]
+            else:
+                self.checkedout_books_on_file[book_title].append(book_info)            
         print(f"{my_customer.name} has checked out {book_title} on {checkout_date}. Book is due on {self.due_date}")
         return checkout_date, self.due_date, book_title
 
 
 
-    def return_book(self, book_title, book):
-        if book_title in self.checkedout_books_on_file:
-            get_checkout_date = self.checkedout_books_on_file[book_title][-1]['checkout_date']
-            if get_checkout_date:
-                end = get_checkout_date + timedelta(days=45)
-                self.return_date = get_checkout_date + (end - get_checkout_date) * random.random()
-                print(f"Return date for {book_title} is {self.return_date}")
-                self.calculate_late_fees(book_title)
-                book.copies += 1
+    def return_book(self, book_title, book, customer):
+        """
+        Checking if the book the customer wants to return matches in the file. 
+        If the customer returns the book after the due date, late fees will occur.
 
-        return self.return_date
+        Parameters:
+            book_title (str): the title of the book in the library txt file
+            book (obj): the Book object itself
+            customer (obj): the Customer object
+        """
+        if book_title in self.checkedout_books_on_file:
+            get_checkout_date = ""
+            checkedout_book_arr = self.checkedout_books_on_file[book_title]
+            index = 0
+            for i in range (len(checkedout_book_arr)):
+                if checkedout_book_arr[i]['name'] == customer.name:
+                    index = i
+                    get_checkout_date = checkedout_book_arr[i]['checkout_date']
+
+            checkedout_book_arr.pop(index)
+            
+            self.return_date = get_checkout_date + timedelta(days= 45 * random.random())
+            print(f"Return date for {book_title} is {self.return_date}")
+            self.calculate_late_fees(book_title)
+            book.copies += 1
+
+            return self.return_date
+        
+        print("This book has not been checked out")
+        return None
     
     def calculate_late_fees(self, book_title):
         get_due_date = self.due_date
@@ -177,7 +220,42 @@ class Library:
             return int(late)
     
 
-# ??????? I took my stuff out, so you can figure this out
+
 if __name__ == "__main__":
-    pass
+
+    book1 = Book("Moby Dick", "Herman Melville", 10)
+    book2 = Book("Peter Pan", "J.M. Barrie", 10)
+    book3 = Book("Oliver Twist", "Charles Dickens", 10)
+    book_not_in_lib = Book("The Giver", "Chris Evans", 10)
+
+
+    customer1 = Customer("Sam", "Puckett", "spuck@gmail.com")
+    customer2 = Customer("Fred", "Benson", "fredben@gmail.com")
+    customer3 = Customer("Carly", "Shay", "icarlyshay@gmail.com")
+
+    library = Library()
+    assert (len(library.books_on_file) == 18)
+
+    library.add_customer(customer1)
+    library.add_customer(customer2)
+    assert(len(library.customers) == 2)
+
     
+    library.checkout_book("Moby Dick", customer1, book1)
+    assert(library.checkedout_books_on_file["Moby Dick"] != None)
+    assert(book1.copies == 9)
+    assert(library.checkout_book("The Giver", customer2, book_not_in_lib) == None)
+
+    for i in range(9):
+        library.checkout_book("Moby Dick", customer1, book1)
+
+    assert(book1.copies == 0)
+    assert(library.checkout_book("Moby Dick", customer1, book1) == None)
+    assert(len(book1.waitlist) == 1)
+
+    assert(library.checkout_book("Peter Pan", customer3, book2) == None)
+
+    assert(library.return_book("Oliver Twist", book1, customer2) == None)
+    
+    assert(library.return_book("Moby Dick", book1, customer1) != None)
+    assert(len(library.checkedout_books_on_file["Moby Dick"]) == 9)
