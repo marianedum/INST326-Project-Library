@@ -9,6 +9,21 @@ class Book:
         self.waitlist = []
 
     def add_to_waitlist(self, a_customer, library_id):
+        """
+        Add a customer to the waitlist for a book.
+
+        Args:
+            a_customer (Customer): The customer to be added to the waitlist.
+            library_id (Library): The library containing the book.
+
+        Returns:
+            list or None: The updated waitlist if the customer is successfully added,
+                otherwise None.
+
+        Edge Case:
+            Modifies the waitlist of the book and the books_on_waitlist attribute of the customer.
+
+        """    
         # if a customer doesn't have a library card, they can't be added to thr waitlist
         if a_customer.library_card is None:
             print("Customer has no card on file")
@@ -40,6 +55,19 @@ class Book:
 
 
     def remove_from_waitlist(self, a_customer):
+        """
+        Remove a customer from the waitlist for the book.
+
+        Args:
+            a_customer (Customer): The customer to be removed from the waitlist.
+
+        Returns:
+            list or None: The updated waitlist if the customer is successfully removed,
+                otherwise None.
+
+        Edge Case:
+            Modifies the waitlist of the book when the customer is revoed from the list of customers in the library.
+    """
         # Check if there are customers on the waitlist
         if self.waitlist:
             print(f"{a_customer.name} has been removed from waitlist for {self.book_title}")
