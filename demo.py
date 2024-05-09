@@ -70,7 +70,7 @@ class Book:
 
         Edge Case:
             Modifies the waitlist of the book when the customer is revoed from the list of customers in the library.
-    """
+        """
         # Check if there are customers on the waitlist
         if self.waitlist:
             print(f"{a_customer.name} has been removed from waitlist for {self.book_title}")
