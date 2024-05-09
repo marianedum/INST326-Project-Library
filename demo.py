@@ -99,15 +99,9 @@ class Library:
             print(f"Customer added with library card number {customer.library_card}")
             return customer
         return None
-<<<<<<< HEAD
         
         
     def remove_customer(self, library_card, customer): 
-=======
-
-    
-    def remove_customer(self, customer): 
->>>>>>> adda18d08e4e19bd9302e3a204d774ee4e6860fc
         customer = Customer()
         customer_name = customer.name #name of customer that
         
