@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 import random
+import unittest
 
 class Book:
     """
@@ -289,7 +290,7 @@ class Library:
         """
         Checks if a customer's returned book would have late fees. If the customer's
         book was returned by the due date, customer won't have any late fees. If
-        customer's book was returned late, the late fee will be calculated.
+        customer's book was returned late, the late fee will be calculted.
 
         Parameters:
             book_title (str): the title of the book that the late fee is being 
@@ -305,69 +306,51 @@ class Library:
             print(f"{book_title} is {days_late} days late")
             if days_late > 0:
                 late = days_late * 0.50
-                print(f"Customer needs pay ${late} for {book_title}")
+                print(f"Customer needs pay ${late}")
                 return int(late)
         else:
             late = 0
             print(f"Customer is fine")
             return int(late)
     
-    
-class UnitTests: 
-    """
-    Class for all unit tests that are called after certain calls in main method 
-    are made.
-    """
-    def test_library_books_on_file():
-        assert (len(library.books_on_file) == 18)
-    def test_add_first_2customers():
-        assert(len(library.customers) == 2)
-    def test_checkout_1Moby_Dick():
-        assert(library.checkedout_books_on_file["Moby Dick"] != None)
-        assert(book1.copies == 9)
-    def test_checkout_book_edge_cases():
-        assert(library.checkout_book("The Giver", customer2, book_not_in_lib) == None)
-        assert(library.checkout_book("Peter Pan", customer3, book2) == None)
-    def test_checkout_all_Moby_Dick():
-        assert(book1.copies == 0)
-        assert(library.checkout_book("Moby Dick", customer1, book1) == None)
-        assert(len(library.checkedout_books_on_file["Moby Dick"]) == 9)
-    def test_add_waitlist():
-        assert(len(book1.waitlist) == 1)
-    def test_return_book_edge_cases():
-        assert(library.return_book("Oliver Twist", book1, customer2) == None)
-        assert(library.return_book("Moby Dick", book1, customer1) != None)
+
 
 if __name__ == "__main__":
-    tests = UnitTests()
-    # creates new Library instance that'll be used for rest of main
-    library = Library()
-    print("Open library system")
-    tests.test_library_books_on_file()
-    
-    # creates new Customers instances and adds them to library  
-    customer1 = Customer("Sam", "Puckett", "spuck@gmail.com")
-    customer2 = Customer("Fred", "Benson", "fredben@gmail.com")
-    customer3 = Customer("Carly", "Shay", "icarlyshay@gmail.com")
-
-    library.add_customer(customer1)
-    library.add_customer(customer2)
-    tests.test_add_first_2customers()
-    
-    # check out books that exist in library.txt
     book1 = Book("Moby Dick", "Herman Melville", 10)
     book2 = Book("Peter Pan", "J.M. Barrie", 10)
     book3 = Book("Oliver Twist", "Charles Dickens", 10)
     book_not_in_lib = Book("The Giver", "Chris Evans", 10)
 
+
+    customer1 = Customer("Sam", "Puckett", "spuck@gmail.com")
+    customer2 = Customer("Fred", "Benson", "fredben@gmail.com")
+    customer3 = Customer("Carly", "Shay", "icarlyshay@gmail.com")
+
+    library = Library()
+    assert (len(library.books_on_file) == 18)
+
+    library.add_customer(customer1)
+    library.add_customer(customer2)
+    assert(len(library.customers) == 2)
+
+
     library.checkout_book("Moby Dick", customer1, book1)
-    tests.test_checkout_1Moby_Dick()
-    tests.test_checkout_book_edge_cases()
-    
+    assert(library.checkedout_books_on_file["Moby Dick"] != None)
+    assert(book1.copies == 9)
+    assert(library.checkout_book("The Giver", customer2, book_not_in_lib) == None)
+
     for i in range(9):
         library.checkout_book("Moby Dick", customer1, book1)
-    tests.test_checkout_all_Moby_Dick()
-    tests.test_add_waitlist()
-    tests.test_return_book_edge_cases()
-    
 
+    assert(book1.copies == 0)
+    assert(library.checkout_book("Moby Dick", customer1, book1) == None)
+    assert(len(book1.waitlist) == 1)
+
+    assert(library.checkout_book("Peter Pan", customer3, book2) == None)
+
+    assert(library.return_book("Oliver Twist", book1, customer2) == None)
+
+    assert(library.return_book("Moby Dick", book1, customer1) != None)
+    assert(len(library.checkedout_books_on_file["Moby Dick"]) == 9)
+
+    
