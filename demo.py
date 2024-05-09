@@ -2,6 +2,9 @@ from datetime import datetime, timedelta
 import random
 
 class Book:
+    """
+    Represents a book in a library.
+    """
     def __init__(self, book_title, author, copies):
         self.book_title = book_title
         self.author = author
@@ -88,6 +91,9 @@ class Book:
             return None
             
 class Customer:
+    """
+    Represents a customer in a library.
+    """
     def __init__(self, first_name, last_name, email):
         self.name = first_name + " " + last_name
         self.email = email
@@ -96,6 +102,9 @@ class Customer:
         self.late_fees = 0
        
 class Library:
+    """
+    Represents library system.
+    """
     def __init__(self):
             # self.customers = {}
             # self.checked_out_books_on_file = {}
