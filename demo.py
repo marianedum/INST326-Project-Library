@@ -227,10 +227,41 @@ class Library:
 
 
 if __name__ == "__main__":
+    book1 = Book("Moby Dick", "Herman Melville", 10)
+    book2 = Book("Peter Pan", "J.M. Barrie", 10)
+    book3 = Book("Oliver Twist", "Charles Dickens", 10)
+    book_not_in_lib = Book("The Giver", "Chris Evans", 10)
+
+
+    customer1 = Customer("Sam", "Puckett", "spuck@gmail.com")
+    customer2 = Customer("Fred", "Benson", "fredben@gmail.com")
+    customer3 = Customer("Carly", "Shay", "icarlyshay@gmail.com")
+
     library = Library()
-    book = Book("The Hobbit", "JRR Tolkien", 10)
-    book2 = Book("The Lord of the Rings", "<NAME>", 1)
-    book3 = Book("The Hitchhiker's Guide to the Galaxy", "<NAME>", 3)
-    book4 = Book("The Catcher in the Rye", "<NAME>", 4)
-    book5 = Book("The Grapes of Wrath", "<NAME>", 3)
+    assert (len(library.books_on_file) == 18)
+
+    library.add_customer(customer1)
+    library.add_customer(customer2)
+    assert(len(library.customers) == 2)
+
+
+    library.checkout_book("Moby Dick", customer1, book1)
+    assert(library.checkedout_books_on_file["Moby Dick"] != None)
+    assert(book1.copies == 9)
+    assert(library.checkout_book("The Giver", customer2, book_not_in_lib) == None)
+
+    for i in range(9):
+        library.checkout_book("Moby Dick", customer1, book1)
+
+    assert(book1.copies == 0)
+    assert(library.checkout_book("Moby Dick", customer1, book1) == None)
+    assert(len(book1.waitlist) == 1)
+
+    assert(library.checkout_book("Peter Pan", customer3, book2) == None)
+
+    assert(library.return_book("Oliver Twist", book1, customer2) == None)
+
+    assert(library.return_book("Moby Dick", book1, customer1) != None)
+    assert(len(library.checkedout_books_on_file["Moby Dick"]) == 9)
+
     
